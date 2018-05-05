@@ -10,7 +10,7 @@ import shutil
 def main():
     parser = argparse.ArgumentParser(description='Flags')
     parser.add_argument('-v', dest='verbose', action='store_true')
-    parser.add_argument('-t', dest='test', action='store_true')
+    parser.add_argument('-s', dest='split', action='store_true')
     parser.add_argument('directory1')
     parser.add_argument('directory2')
     parser.add_argument('outdir_name')
@@ -22,7 +22,7 @@ def main():
         return
     
     #print("ASD")
-    outdir = "data_+
+    outdir = "data_"
     outdir += args.outdir_name
     if args.nlead == '0':
         outdir += "_300"
@@ -83,12 +83,15 @@ def main():
     Y_np = Y_np[s]
     M_np = M_np[s]
 
+    if args.split:
+        outdir += '_split'
+
     if os.path.exists(outdir):
         shutil.rmtree(outdir)
 
     os.makedirs(outdir)
 
-    if args.test:
+    if args.split:
         np.save(outdir+'/X_test', X_np[:nTest])
         np.save(outdir+'/X_train', X_np[nTest:])
         np.save(outdir+'/Y_test', Y_np[:nTest])

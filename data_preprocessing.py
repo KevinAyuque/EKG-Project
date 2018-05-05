@@ -68,6 +68,25 @@ def get_leads(waveform):
     leads[5] = leads[1] - leads[0]/2
     return leads
 
+def contains(str1, str2):
+    #print(str1, str2)
+    index_start = str1.find(str2)
+    index_end = index_start + len(str2) -1
+    if index_start < 0:
+        return 0
+    
+    if index_start-1 >= 0:
+    #    print(str1[index_start - 1])
+        if str1[index_start-1] != ",":
+            return 0
+    
+    if index_end + 1 < len(str1):
+    #    print(str1[index_end + 1])
+        if str1[index_end + 1] != ",":
+            return 0
+    return 1
+#str1.find(str2)
+
 def output_leads(directory, objects_name, objects_name_exclude, other_objects, other_objects_exclude, out_dir, flag_out, verbose):
     """
     Goes through all the files
@@ -88,17 +107,26 @@ def output_leads(directory, objects_name, objects_name_exclude, other_objects, o
                 # OR
                 or_flag = 0
                 for object_name in and_object_name:
-                    if object_name in ds.split(','):
-                        or_flag = 1
-                        #break
+                    if or_flag == 0:
+                        or_flag = contains(ds, object_name)
+                    else:
+                        break
+                        #print(or_flag)
+                    #if object_name in ds #.split(','):
+                    #    or_flag = 1
+                    #    #break
                 if or_flag == 0:
                     flag = 0
-                    #break
+                    break
             # Exclude
             for object_name_exclude in objects_name_exclude:
-                if object_name_exclude in ds.split(','):
-                    flag = 0
+                if flag == 1:
+                    flag = abs(1 - contains(ds, object_name_exclude))
+                else:
                     break
+                #if object_name_exclude in ds.split(','):
+                #    flag = 0
+                #    break
         except:
             pass
         if flag == 1:
@@ -156,13 +184,14 @@ def main():
     PERI = [['200']]
     PERI_IGNORE = ['302,200','145,302,155,200,220']
 
-    STE = [['330,160','330,161', '330,162', '330,163', '330,165', '330,166', '330,174']] #173?
+    STE = [['330,160','330,161', '330,162', '330,163', '330,165', '330,166', '330,174']]
     STE_IGNORE = ['312,330']
 
-    SVT = [['55'], ['100','349']] # 106?
+    # [0] = SVT, [1] = with Aberrancy
+    SVT = [['21','50,346','51,346','52','53','55'], ['86','100','101','102','104','105','106','349']]
     SVT_IGNORE = []
 
-    VT = [["70","71","72","73"]]
+    VT = [['70','72','73']]
     VT_IGNORE = []
 
     data = []
