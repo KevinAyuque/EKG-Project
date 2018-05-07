@@ -1,4 +1,6 @@
-# SVT
+# Distinguishing ST-Elevation Myocardial Infarction (STEMI) from Pericarditis and Ventricular Tachycardia (VT) from Supraventricular Tachycardia (SVT) with aberrancy
+
+This is the code used to pre-process the data. To get access to the data please consult with the professor, he asked not to share it. For training, go to https://drive.google.com/file/d/1InbP-TNh1YGKncOkRlJm6kzNsMxgPIa_/view?usp=sharing
 
 1. Run data_Y.py (This looks at the data and classifies it based on the criteria)
 
